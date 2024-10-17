@@ -10,7 +10,7 @@ const headerStyle = {
   color: "#fff",
   padding: "1rem",
   height: 60,
-  backgroundColor: "#4096ff",
+  backgroundColor: "#181A20",
   display: "flex",
   justifyContent: "space-between",
   alignItems: "center",
@@ -20,7 +20,7 @@ export default function AppHeader() {
   const [select, setSelect] = useState(false);
   const [modal, setModal] = useState(false);
   const [coin, setCoin] = useState(null);
-  const [drawer, setDrawer] = useState(null);
+  const [drawer, setDrawer] = useState(false);
   const { crypto } = useCrypto();
 
   useEffect(() => {
