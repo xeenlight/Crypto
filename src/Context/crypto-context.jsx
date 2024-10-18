@@ -1,5 +1,5 @@
 import { createContext, useState, useEffect, useContext } from "react";
-import { fakeFetchCrypto, fetchAssets } from "../Api";
+import { fetchCryptoData, fetchAssets } from "../Api";
 import { percentDifference } from "../Utils";
 
 const CryptoContest = createContext({
@@ -30,15 +30,24 @@ export function CryptoContestProvider({ children }) {
   useEffect(() => {
     async function preload() {
       setLoading(true);
-      const { result } = await fakeFetchCrypto();
-      const assets = await fetchAssets();
-
-      setAssets(mapAssets(assets, result));
-      setCrypto(result);
-      setLoading(false);
+      try {
+        const data = await fetchCryptoData();
+        const assetsResponse = await fetchAssets();
+  
+        // Убедитесь, что assetsResponse — это массив
+        const assets = Array.isArray(assetsResponse) ? assetsResponse : assetsResponse.assets || [];
+  
+        setAssets(mapAssets(assets, data.result));
+        setCrypto(data.result);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
+      }
     }
     preload();
   }, []);
+  
 
   function addAsset(newAsset) {
     setAssets((prev) => mapAssets([...prev, newAsset], crypto));
