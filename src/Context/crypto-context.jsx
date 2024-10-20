@@ -4,7 +4,7 @@ import { percentDifference } from "../Utils";
 
 const CryptoContest = createContext({
   assets: [],
-  crepto: [],
+  crypto: [], 
   loading: false,
 });
 
@@ -33,10 +33,9 @@ export function CryptoContestProvider({ children }) {
       try {
         const data = await fetchCryptoData();
         const assetsResponse = await fetchAssets();
-  
-        // Убедитесь, что assetsResponse — это массив
+
         const assets = Array.isArray(assetsResponse) ? assetsResponse : assetsResponse.assets || [];
-  
+
         setAssets(mapAssets(assets, data.result));
         setCrypto(data.result);
       } catch (error) {
@@ -47,14 +46,27 @@ export function CryptoContestProvider({ children }) {
     }
     preload();
   }, []);
-  
 
   function addAsset(newAsset) {
-    setAssets((prev) => mapAssets([...prev, newAsset], crypto));
+    const updatedAsset = {
+      ...newAsset,
+      uniqueId: Date.now() + Math.random(), // добавляем уникальный идентификатор
+    };
+    const updatedAssets = [...assets, updatedAsset];
+    setAssets(mapAssets(updatedAssets, crypto));
+    localStorage.setItem("userAssets", JSON.stringify(updatedAssets));
   }
+  
+
+  function removeAsset(uniqueId) {
+    const updatedAssets = assets.filter(asset => asset.uniqueId !== uniqueId);
+    setAssets(mapAssets(updatedAssets, crypto));
+    localStorage.setItem("userAssets", JSON.stringify(updatedAssets));
+  }
+  
 
   return (
-    <CryptoContest.Provider value={{ loading, crypto, assets, addAsset }}>
+    <CryptoContest.Provider value={{ loading, crypto, assets, addAsset, removeAsset }}> {/* Добавил removeAsset */}
       {children}
     </CryptoContest.Provider>
   );

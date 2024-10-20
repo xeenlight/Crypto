@@ -6,25 +6,19 @@ const options = {
     }
   };
   
-  export function fetchCryptoData() {
-    return fetch('https://openapiv1.coinstats.app/coins', options)
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.json();
-      });
+  export async function fetchCryptoData() {
+    const response = await fetch('https://openapiv1.coinstats.app/coins', options);
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    return await response.json();
   }
   
-  export function fetchAssets() {
-    // Здесь можно подключить ваш API для получения активов пользователя
-    // Например, если у вас есть другой API для получения активов:
-    return fetch('https://openapiv1.coinstats.app/coins', options)
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.json();
-      });
+  export async function fetchAssets() {
+    const response = await fetch('https://openapiv1.coinstats.app/coins', options);
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    return await response.json();
   }
   
