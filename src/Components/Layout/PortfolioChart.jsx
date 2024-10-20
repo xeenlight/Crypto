@@ -41,7 +41,7 @@ export default function PortfolioChart() {
         display: "flex",
         marginBottom: "1rem",
         justifyContent: "center",
-        height: "55%",
+        height: "85%",
       }}
     >
       <Doughnut data={data} />

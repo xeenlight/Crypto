@@ -11,7 +11,7 @@ import CryptoContext from '../../Context/crypto-context'
 const siderStyle = {
   padding: "1rem",
   overflowY: 'auto', // Добавлено для прокрутки
-  height: '100vh', // Устанавливаем высоту, чтобы прокрутка работала
+  height: '70vh', // Устанавливаем высоту, чтобы прокрутка работала
   backgroundColor: "#181A20",
 };
 

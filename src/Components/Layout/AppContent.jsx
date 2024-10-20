@@ -1,11 +1,10 @@
 import { Layout, Typography } from "antd";
 import { useCrypto } from "../../Context/crypto-context";
 import PortfolioChart from "./PortfolioChart";
-import AssetsTable from "./AssetsTable";
 
 const contentStyle = {
   textAlign: "center",
-  minHeight: "calc(100vh - 60px)",
+  minHeight: "calc(70vh - 60px)",
   color: "#fff",
   backgroundColor: "#181A20",
   padding: "1rem",
@@ -29,7 +28,6 @@ export default function AppContent() {
         $
       </Typography.Title>
       <PortfolioChart/>
-      <AssetsTable/>
     </Layout.Content>
   );
 }
