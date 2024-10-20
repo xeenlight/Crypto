@@ -4,7 +4,7 @@ import { percentDifference } from "../Utils";
 
 const CryptoContest = createContext({
   assets: [],
-  crypto: [], 
+  crypto: [],
   loading: false,
 });
 
@@ -13,6 +13,7 @@ export function CryptoContestProvider({ children }) {
   const [crypto, setCrypto] = useState([]);
   const [assets, setAssets] = useState([]);
 
+  // Функция для отображения активов
   function mapAssets(assets, result) {
     return assets.map((asset) => {
       const coin = result.find((c) => c.id === asset.id);
@@ -27,6 +28,7 @@ export function CryptoContestProvider({ children }) {
     });
   }
 
+  // Загрузка данных при инициализации
   useEffect(() => {
     async function preload() {
       setLoading(true);
@@ -36,7 +38,9 @@ export function CryptoContestProvider({ children }) {
 
         const assets = Array.isArray(assetsResponse) ? assetsResponse : assetsResponse.assets || [];
 
-        setAssets(mapAssets(assets, data.result));
+        // Загрузка активов из localStorage
+        const storedAssets = JSON.parse(localStorage.getItem("userAssets")) || [];
+        setAssets(mapAssets(storedAssets, data.result));
         setCrypto(data.result);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -47,26 +51,28 @@ export function CryptoContestProvider({ children }) {
     preload();
   }, []);
 
+  // Добавление нового актива
   function addAsset(newAsset) {
     const updatedAsset = {
       ...newAsset,
       uniqueId: Date.now() + Math.random(), // добавляем уникальный идентификатор
     };
     const updatedAssets = [...assets, updatedAsset];
-    setAssets(mapAssets(updatedAssets, crypto));
+    const mappedAssets = mapAssets(updatedAssets, crypto);
+    setAssets(mappedAssets);
     localStorage.setItem("userAssets", JSON.stringify(updatedAssets));
   }
-  
 
+  // Удаление актива
   function removeAsset(uniqueId) {
     const updatedAssets = assets.filter(asset => asset.uniqueId !== uniqueId);
-    setAssets(mapAssets(updatedAssets, crypto));
+    const mappedAssets = mapAssets(updatedAssets, crypto);
+    setAssets(mappedAssets);
     localStorage.setItem("userAssets", JSON.stringify(updatedAssets));
   }
-  
 
   return (
-    <CryptoContest.Provider value={{ loading, crypto, assets, addAsset, removeAsset }}> {/* Добавил removeAsset */}
+    <CryptoContest.Provider value={{ loading, crypto, assets, addAsset, removeAsset }}>
       {children}
     </CryptoContest.Provider>
   );

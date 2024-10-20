@@ -1,8 +1,8 @@
 import { Table } from 'antd';
 import { useCrypto } from "../../Context/crypto-context";
+import moment from 'moment';
 
 const tableStyle = {
-
   textAlign: "center",
   color: "#fff",
   backgroundColor: "#181A20",
@@ -14,7 +14,7 @@ const columns = [
     title: 'Name',
     dataIndex: 'name',
     sorter: (a, b) => a.name.localeCompare(b.name),
-    sortDirections: ['ascend', 'descend'], 
+    sortDirections: ['ascend', 'descend'],
   },
   {
     title: 'Price, $',
@@ -32,19 +32,20 @@ const columns = [
     title: 'Time',
     dataIndex: 'time',
     defaultSortOrder: 'descend',
-    sorter: (a, b) => a.time - b.time,
+    sorter: (a, b) => new Date(a.time) - new Date(b.time),
+    render: (text) => moment(text).format("YYYY-MM-DD HH:mm:ss"), 
   },
 ];
 
 export default function AssetsTable() {
   const { assets } = useCrypto();
 
-  const data = assets.map((a) => ({
-    key: a.id,
+  const data = assets.map((a, index) => ({
+    key: `${a.id}-${index}`,  // Добавляем индекс для уникальности ключа
     name: a.name,
     price: a.price,
     amount: a.amount,
-    time: a.time,
+    time: a.date, 
   }));
 
   return <Table style={tableStyle} pagination={false} columns={columns} dataSource={data} />;
