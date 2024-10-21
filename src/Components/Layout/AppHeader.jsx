@@ -21,7 +21,7 @@ export default function AppHeader() {
   const [modal, setModal] = useState(false);
   const [coin, setCoin] = useState(null);
   const [drawer, setDrawer] = useState(false);
-  const { crypto } = useCrypto();
+  const { crypto, preload } = useCrypto(); // Добавляем preload для обновления
 
   useEffect(() => {
     const keypress = (event) => {
@@ -40,12 +40,10 @@ export default function AppHeader() {
 
   return (
     <Layout.Header style={headerStyle}>
-      
       <Select
         style={{
           width: 250,
         }}
-        
         open={select}
         onSelect={handleSelect}
         onClick={() => setSelect((prev) => !prev)}
@@ -66,7 +64,19 @@ export default function AppHeader() {
           </Space>
         )}
       />
-      <Button type="primary" onClick={() => setDrawer(true)} style={{ backgroundColor: '#ffffff', color: '#181A20' }}>
+
+      <Button
+        type="default"
+        onClick={preload}
+        style={{ marginLeft: "1rem", color: "#000000" }}
+      >
+        Update price
+      </Button>
+      <Button
+        type="primary"
+        onClick={() => setDrawer(true)}
+        style={{ backgroundColor: "#ffffff", color: "#181A20" }}
+      >
         Add asset
       </Button>
 
@@ -80,9 +90,8 @@ export default function AppHeader() {
         onClose={() => setDrawer(false)}
         open={drawer}
         destroyOnClose
-        
       >
-        <AddAssetForm  onClose={() => setDrawer(false)}/>
+        <AddAssetForm onClose={() => setDrawer(false)} />
       </Drawer>
     </Layout.Header>
   );

@@ -74,11 +74,9 @@ export function CryptoContestProvider({ children }) {
   }
 
   return (
-    <CryptoContest.Provider value={{ loading, crypto, assets, addAsset, removeAsset }}>
+    <CryptoContest.Provider value={{ loading, crypto, assets, addAsset, removeAsset, preload  }}>
       {children}
-      <button onClick={preload} disabled={loading}>
-        {loading ? "Обновление..." : "Обновить данные"}
-      </button>
+
     </CryptoContest.Provider>
   );
 }
