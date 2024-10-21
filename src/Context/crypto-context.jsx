@@ -1,5 +1,5 @@
 import { createContext, useState, useEffect, useContext } from "react";
-import { fetchCryptoData, fetchAssets } from "../Api";
+import { fetchCryptoData, fetchAssets } from "../Api"; // Убедись, что пути правильные
 import { percentDifference } from "../Utils";
 
 const CryptoContest = createContext({
@@ -28,26 +28,28 @@ export function CryptoContestProvider({ children }) {
     });
   }
 
-  // Загрузка данных при инициализации
-  useEffect(() => {
-    async function preload() {
-      setLoading(true);
-      try {
-        const data = await fetchCryptoData();
-        const assetsResponse = await fetchAssets();
+  // Загрузка данных
+  async function preload() {
+    console.log("Loading data..."); // Отладка
+    setLoading(true);
+    try {
+      const data = await fetchCryptoData();
+      const assetsResponse = await fetchAssets();
 
-        const assets = Array.isArray(assetsResponse) ? assetsResponse : assetsResponse.assets || [];
+      console.log("Data loaded:", data, assetsResponse); // Отладка
 
-        // Загрузка активов из localStorage
-        const storedAssets = JSON.parse(localStorage.getItem("userAssets")) || [];
-        setAssets(mapAssets(storedAssets, data.result));
-        setCrypto(data.result);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        setLoading(false);
-      }
+      const storedAssets = JSON.parse(localStorage.getItem("userAssets")) || [];
+      setAssets(mapAssets(storedAssets, data.result));
+      setCrypto(data.result);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
     }
+  }
+
+  // Первоначальная загрузка данных
+  useEffect(() => {
     preload();
   }, []);
 
@@ -74,6 +76,9 @@ export function CryptoContestProvider({ children }) {
   return (
     <CryptoContest.Provider value={{ loading, crypto, assets, addAsset, removeAsset }}>
       {children}
+      <button onClick={preload} disabled={loading}>
+        {loading ? "Обновление..." : "Обновить данные"}
+      </button>
     </CryptoContest.Provider>
   );
 }
