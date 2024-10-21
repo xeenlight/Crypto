@@ -66,7 +66,7 @@ export default function AppHeader() {
           </Space>
         )}
       />
-      <Button type="primary" onClick={() => setDrawer(true)}>
+      <Button type="primary" onClick={() => setDrawer(true)} style={{ backgroundColor: '#ffffff', color: '#181A20' }}>
         Add asset
       </Button>
 
@@ -80,6 +80,7 @@ export default function AppHeader() {
         onClose={() => setDrawer(false)}
         open={drawer}
         destroyOnClose
+        
       >
         <AddAssetForm  onClose={() => setDrawer(false)}/>
       </Drawer>

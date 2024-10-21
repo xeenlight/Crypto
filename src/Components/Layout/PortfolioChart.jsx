@@ -6,12 +6,24 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 
 export default function PortfolioChart() {
   const { assets } = useCrypto();
+
+  // Суммируем активы с одинаковыми именами
+  const aggregatedData = assets.reduce((acc, asset) => {
+    const existingAsset = acc.find(item => item.name === asset.name);
+    if (existingAsset) {
+      existingAsset.totalAmount += asset.totalAmount; // Суммируем totalAmount
+    } else {
+      acc.push({ name: asset.name, totalAmount: asset.totalAmount });
+    }
+    return acc;
+  }, []);
+
   const data = {
-    labels: assets.map((a) => a.name),
+    labels: aggregatedData.map((a) => a.name),
     datasets: [
       {
         label: "$",
-        data: assets.map((a) => a.totalAmount),
+        data: aggregatedData.map((a) => a.totalAmount),
         backgroundColor: [
           "rgba(255, 99, 99, 0.3)",
           "rgba(232, 235, 54, 0.3)",
@@ -36,13 +48,12 @@ export default function PortfolioChart() {
   };
 
   const options = {
-    cutout: '60%', 
+    cutout: '60%',
     plugins: {
       legend: {
         position: 'top',
       },
     },
-    
   };
 
   return (

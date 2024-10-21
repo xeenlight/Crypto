@@ -4,9 +4,10 @@ import moment from 'moment';
 
 const tableStyle = {
   textAlign: "center",
-  color: "#fff",
   backgroundColor: "#181A20",
   padding: "1rem",
+  
+  
 };
 
 const columns = [
